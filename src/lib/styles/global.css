@@ -1,0 +1,60 @@
+@import './theme.css';
+
+/* Box-sizing reset */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+/* Base styles */
+html {
+	font-size: var(--font-size-base);
+}
+
+body {
+	margin: 0;
+	font-family: var(--font-body);
+	background: var(--color-bg);
+	color: var(--color-text);
+	line-height: var(--line-height);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+/* Remove default input/textarea styling inconsistencies */
+input,
+textarea,
+button {
+	font-family: inherit;
+	font-size: inherit;
+	line-height: inherit;
+	color: inherit;
+}
+
+textarea {
+	resize: none;
+}
+
+/* Link defaults */
+a {
+	color: var(--color-accent);
+	text-decoration: none;
+}
+
+a:hover {
+	color: var(--color-accent-hover);
+}
+
+/* Focus styles */
+:focus-visible {
+	outline: 2px solid var(--color-accent);
+	outline-offset: 2px;
+}
+
+/* Responsive defaults */
+img,
+svg {
+	max-width: 100%;
+	height: auto;
+}

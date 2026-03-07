@@ -1,0 +1,49 @@
+:root {
+	/* Warm palette -- light mode */
+	--color-bg: #faf8f5;
+	--color-bg-elevated: #ffffff;
+	--color-text: #2d2a26;
+	--color-text-muted: #8a8279;
+	--color-accent: #d4845a;
+	--color-accent-hover: #c4744a;
+	--color-border: #e8e2da;
+	--color-success: #6b9e78;
+	--color-warning: #d4a04a;
+	--color-error: #c45c5c;
+
+	/* Typography */
+	--font-body: 'Inter', system-ui, -apple-system, sans-serif;
+	--font-mono: 'JetBrains Mono', ui-monospace, monospace;
+	--font-size-base: 16px;
+	--font-size-lg: 18px;
+	--font-size-sm: 14px;
+	--font-size-xs: 12px;
+	--line-height: 1.6;
+
+	/* Spacing */
+	--space-xs: 4px;
+	--space-sm: 8px;
+	--space-md: 16px;
+	--space-lg: 24px;
+	--space-xl: 48px;
+
+	/* Shapes */
+	--radius-sm: 6px;
+	--radius-md: 10px;
+	--radius-lg: 16px;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-bg: #1c1a17;
+		--color-bg-elevated: #2a2723;
+		--color-text: #e8e2da;
+		--color-text-muted: #9a9189;
+		--color-accent: #e09a6e;
+		--color-accent-hover: #d08a5e;
+		--color-border: #3d3830;
+		--color-success: #7dae88;
+		--color-warning: #d4a04a;
+		--color-error: #d46c6c;
+	}
+}
