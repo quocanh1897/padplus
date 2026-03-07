@@ -14,8 +14,11 @@ db.pragma('journal_mode = WAL');
 // Synchronous NORMAL is safe with WAL and faster than FULL
 db.pragma('synchronous = NORMAL');
 
+// Enable foreign key enforcement
+db.pragma('foreign_keys = ON');
+
 // Schema migrations using built-in user_version pragma
-const currentVersion = db.pragma('user_version', { simple: true }) as number;
+let currentVersion = db.pragma('user_version', { simple: true }) as number;
 
 if (currentVersion < 1) {
 	db.exec(`
@@ -31,6 +34,26 @@ if (currentVersion < 1) {
 		CREATE INDEX IF NOT EXISTS idx_pads_slug ON pads(slug);
 	`);
 	db.pragma('user_version = 1');
+}
+
+currentVersion = db.pragma('user_version', { simple: true }) as number;
+
+if (currentVersion < 2) {
+	db.exec(`
+		CREATE TABLE IF NOT EXISTS images (
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			pad_id INTEGER NOT NULL REFERENCES pads(id) ON DELETE CASCADE,
+			uuid TEXT NOT NULL UNIQUE,
+			filename TEXT NOT NULL,
+			mime_type TEXT NOT NULL DEFAULT 'image/webp',
+			size_bytes INTEGER NOT NULL,
+			sort_order INTEGER NOT NULL DEFAULT 0,
+			created_at TEXT NOT NULL DEFAULT (datetime('now'))
+		);
+		CREATE INDEX IF NOT EXISTS idx_images_pad_id ON images(pad_id);
+		CREATE INDEX IF NOT EXISTS idx_images_uuid ON images(uuid);
+	`);
+	db.pragma('user_version = 2');
 }
 
 export default db;
