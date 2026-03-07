@@ -1,5 +1,6 @@
 import { error } from '@sveltejs/kit';
 import { getPadBySlug, createPad } from '$lib/server/pads';
+import { getImagesByPadId } from '$lib/server/images';
 import type { PageServerLoad } from './$types';
 
 // File extensions to reject
@@ -29,9 +30,12 @@ export const load: PageServerLoad = ({ params }) => {
 		pad = createPad(slug);
 	}
 
+	const images = getImagesByPadId(pad.id);
+
 	return {
 		slug: pad.slug,
 		content: pad.content,
-		version: pad.version
+		version: pad.version,
+		images
 	};
 };
