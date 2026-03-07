@@ -101,8 +101,12 @@ export function savePad(
 	content: string,
 	expectedVersion: number
 ): SaveResult {
-	// Try normal version-checked update first (also sets base_content)
-	const result = updateWithBaseStmt.run(content, content, slug, expectedVersion);
+	// Read current content to use as base for future merges
+	const beforeSave = getBySlugStmt.get(slug);
+	const previousContent = beforeSave?.content ?? '';
+
+	// Try normal version-checked update (set base_content to previous content for future merges)
+	const result = updateWithBaseStmt.run(content, previousContent, slug, expectedVersion);
 
 	if (result.changes > 0) {
 		return { type: 'saved', pad: getBySlugStmt.get(slug)! };
@@ -132,7 +136,8 @@ export function savePad(
 		const mergeResult = mergeText(latest.base_content, latest.content, content);
 
 		// Save merged result with incremented version
-		forceUpdateStmt.run(mergeResult.content, mergeResult.content, latest.version + 1, slug);
+		// base_content = server content before merge (the common ancestor for next merge)
+		forceUpdateStmt.run(mergeResult.content, latest.content, latest.version + 1, slug);
 
 		return {
 			pad: getBySlugStmt.get(slug)!,
