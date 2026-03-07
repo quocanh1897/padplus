@@ -61,11 +61,11 @@ Plans:
   1. Two users edit different sections of a pad set to auto-merge mode, save concurrently, and both see a merged result containing both edits
   2. User can switch a pad's collaboration mode (last-save-wins or auto-merge) via a visible mode selector, and the selected mode persists across sessions
   3. When auto-merge produces a conflict (overlapping edits), the user sees the merged result and can review what changed
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 03-01: TBD
-- [ ] 03-02: TBD
+- [ ] 03-01-PLAN.md -- Backend: DB migration (base_content), node-diff3 merge engine, extended PUT handler, mode PATCH endpoint
+- [ ] 03-02-PLAN.md -- Frontend: ModeSelector dropdown, merge response handling, SaveStatus merged state, Playwright E2E tests
 
 ### Phase 4: Real-Time Collaboration
 **Goal**: Multiple users can edit the same pad simultaneously with character-by-character live sync
