@@ -12,7 +12,7 @@ PadPlus delivers a speed-first self-hosted notepad in five phases. Phase 1 build
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Working Notepad** - URL-based pad access with SSR text, auto-save, warm UI, and basic collaboration
+- [x] **Phase 1: Working Notepad** - URL-based pad access with SSR text, auto-save, warm UI, and basic collaboration
 - [ ] **Phase 2: Image Paste** - Clipboard image paste with filesystem storage, lazy-loading, and size limits
 - [ ] **Phase 3: Auto-Merge Collaboration** - Concurrent edit merging with per-pad mode selector
 - [ ] **Phase 4: Real-Time Collaboration** - WebSocket live sync with Yjs CRDT
@@ -34,8 +34,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 Plans:
 - [x] 01-01-PLAN.md -- SvelteKit project scaffold, SQLite database layer, CSS design system
-- [ ] 01-02-PLAN.md -- Pad editor page with SSR, auto-save, conflict handling, landing page
-- [ ] 01-03-PLAN.md -- Playwright E2E test suite and visual verification checkpoint
+- [x] 01-02-PLAN.md -- Pad editor page with SSR, auto-save, conflict handling, landing page
+- [x] 01-03-PLAN.md -- Playwright E2E test suite and visual verification checkpoint
 
 ### Phase 2: Image Paste
 **Goal**: Users can paste images from their clipboard directly into any pad, with images stored locally and loaded without blocking text
@@ -99,7 +99,7 @@ Phases execute in numeric order: 1 --> 2 --> 3 --> 4 --> 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Working Notepad | 0/3 | Planning complete | - |
+| 1. Working Notepad | 3/3 | Complete | 2026-03-08 |
 | 2. Image Paste | 0/2 | Not started | - |
 | 3. Auto-Merge Collaboration | 0/2 | Not started | - |
 | 4. Real-Time Collaboration | 0/2 | Not started | - |
