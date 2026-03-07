@@ -46,11 +46,12 @@ Plans:
   2. Pasted images are stored on the server filesystem with generated filenames (not user-controlled names)
   3. When a pad with images loads, text appears instantly and images lazy-load afterward -- images never block text rendering
   4. Uploading an image larger than the size limit (or exceeding the per-pad quota) shows a clear error message and the upload is rejected
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 02-01: TBD
-- [ ] 02-02: TBD
+- [ ] 02-01-PLAN.md -- Backend: DB migration, image CRUD module, API endpoints (upload, serve, delete, reorder), sharp optimization
+- [ ] 02-02-PLAN.md -- Frontend: ImageGrid, ImageCard, Lightbox components, paste handler, SortableJS drag-reorder
+- [ ] 02-03-PLAN.md -- Playwright E2E tests for all image functionality and visual verification checkpoint
 
 ### Phase 3: Auto-Merge Collaboration
 **Goal**: Two users can edit different sections of the same pad simultaneously without losing each other's work, and users can select their pad's collaboration mode
@@ -100,7 +101,7 @@ Phases execute in numeric order: 1 --> 2 --> 3 --> 4 --> 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Working Notepad | 3/3 | Complete    | 2026-03-07 |
-| 2. Image Paste | 0/2 | Not started | - |
+| 2. Image Paste | 0/3 | Not started | - |
 | 3. Auto-Merge Collaboration | 0/2 | Not started | - |
 | 4. Real-Time Collaboration | 0/2 | Not started | - |
 | 5. Docker Deployment | 0/1 | Not started | - |
