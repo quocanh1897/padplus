@@ -26,20 +26,31 @@ export const PUT: RequestHandler = async ({ params, request }) => {
 
 	const result = savePad(slug, content, version);
 
-	if (result.conflict) {
-		return json(
-			{
-				error: 'conflict',
-				message: 'Pad was modified since your last load',
-				content: result.pad.content,
-				version: result.pad.version
-			},
-			{ status: 409 }
-		);
-	}
+	switch (result.type) {
+		case 'saved':
+			return json({
+				version: result.pad.version,
+				updatedAt: result.pad.updated_at
+			});
 
-	return json({
-		version: result.pad.version,
-		updatedAt: result.pad.updated_at
-	});
+		case 'merged':
+			return json({
+				version: result.pad.version,
+				updatedAt: result.pad.updated_at,
+				merged: true,
+				content: result.pad.content,
+				hadConflicts: result.hadConflicts
+			});
+
+		case 'conflict':
+			return json(
+				{
+					error: 'conflict',
+					message: 'Pad was modified since your last load',
+					content: result.pad.content,
+					version: result.pad.version
+				},
+				{ status: 409 }
+			);
+	}
 };
