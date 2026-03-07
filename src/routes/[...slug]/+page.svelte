@@ -4,6 +4,8 @@
 	import { debounce } from '$lib/utils/debounce';
 	import Header from '$lib/components/Header.svelte';
 	import ConflictBanner from '$lib/components/ConflictBanner.svelte';
+	import ImageGrid from '$lib/components/ImageGrid.svelte';
+	import type { ImageItem } from '$lib/components/ImageGrid.svelte';
 
 	let { data } = $props();
 
@@ -16,6 +18,20 @@
 
 	// Track if content diverged from initial load
 	let initialContent = data.content;
+
+	// Image state -- initialized from SSR data
+	let images = $state<ImageItem[]>(
+		data.images.map((img: { uuid: string; size_bytes: number; sort_order: number }) => ({
+			uuid: img.uuid,
+			url: `/api/pads/${data.slug}/images/${img.uuid}`,
+			status: 'loaded' as const,
+			size_bytes: img.size_bytes,
+			sort_order: img.sort_order
+		}))
+	);
+
+	// Store original File objects for retry functionality
+	const retryFiles = new Map<string, File>();
 
 	async function performSave() {
 		if (isSaving || saveStatus === 'conflict') return;
@@ -77,8 +93,166 @@
 			saveStatus = 'saved';
 			conflictData = null;
 			hasEdited = false;
+			images = data.images.map((img: { uuid: string; size_bytes: number; sort_order: number }) => ({
+				uuid: img.uuid,
+				url: `/api/pads/${data.slug}/images/${img.uuid}`,
+				status: 'loaded' as const,
+				size_bytes: img.size_bytes,
+				sort_order: img.sort_order
+			}));
+			retryFiles.clear();
 		}
 	});
+
+	// Document-level paste handler
+	function handlePaste(event: ClipboardEvent) {
+		const items = event.clipboardData?.items;
+		if (!items) return;
+
+		for (const item of items) {
+			if (item.type.startsWith('image/')) {
+				event.preventDefault();
+				const file = item.getAsFile();
+				if (file) uploadImage(file);
+				return; // Only process first image
+			}
+		}
+		// No image found -- let text paste propagate naturally
+	}
+
+	$effect(() => {
+		document.addEventListener('paste', handlePaste);
+		return () => document.removeEventListener('paste', handlePaste);
+	});
+
+	// Image upload
+	function addErrorCard(message: string) {
+		const tempId = crypto.randomUUID();
+		images = [...images, {
+			uuid: tempId,
+			url: '',
+			status: 'error' as const,
+			errorMessage: message,
+			size_bytes: 0,
+			sort_order: images.length
+		}];
+	}
+
+	async function uploadImage(file: File) {
+		// Client-side size check
+		if (file.size > 5 * 1024 * 1024) {
+			addErrorCard('Image too large (5MB max)');
+			return;
+		}
+
+		const tempId = crypto.randomUUID();
+		const skeleton: ImageItem = {
+			uuid: tempId,
+			url: '',
+			status: 'loading',
+			size_bytes: 0,
+			sort_order: images.length
+		};
+		images = [...images, skeleton];
+
+		// Store file for retry
+		retryFiles.set(tempId, file);
+
+		const formData = new FormData();
+		formData.append('image', file);
+
+		try {
+			const res = await fetch(`/api/pads/${data.slug}/images`, {
+				method: 'POST',
+				body: formData
+			});
+
+			if (!res.ok) {
+				const err = await res.json().catch(() => ({ message: 'Upload failed' }));
+				images = images.map(img =>
+					img.uuid === tempId
+						? { ...img, status: 'error' as const, errorMessage: err.message || 'Upload failed' }
+						: img
+				);
+				return;
+			}
+
+			const result = await res.json();
+			// Upload succeeded -- remove from retry map
+			retryFiles.delete(tempId);
+			images = images.map(img =>
+				img.uuid === tempId
+					? {
+						...img,
+						uuid: result.id,
+						url: `/api/pads/${data.slug}/images/${result.id}`,
+						status: 'loaded' as const,
+						size_bytes: result.size,
+						sort_order: result.sort_order
+					}
+					: img
+			);
+		} catch {
+			images = images.map(img =>
+				img.uuid === tempId
+					? { ...img, status: 'error' as const, errorMessage: 'Upload failed -- check your connection' }
+					: img
+			);
+		}
+	}
+
+	async function handleDeleteImage(uuid: string) {
+		// Optimistically remove from UI
+		const prev = images;
+		images = images.filter(img => img.uuid !== uuid);
+
+		try {
+			const res = await fetch(`/api/pads/${data.slug}/images/${uuid}`, {
+				method: 'DELETE'
+			});
+			if (!res.ok) {
+				// Restore on failure
+				images = prev;
+			}
+		} catch {
+			images = prev;
+		}
+	}
+
+	async function handleReorder(orders: { uuid: string; sort_order: number }[]) {
+		// Optimistically update local sort orders
+		const orderMap = new Map(orders.map(o => [o.uuid, o.sort_order]));
+		images = images
+			.map(img => ({ ...img, sort_order: orderMap.get(img.uuid) ?? img.sort_order }))
+			.sort((a, b) => a.sort_order - b.sort_order);
+
+		try {
+			await fetch(`/api/pads/${data.slug}/images/reorder`, {
+				method: 'PUT',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ orders })
+			});
+		} catch {
+			// Reorder is best-effort; UI already reflects the new order
+		}
+	}
+
+	function handleRetry(uuid: string) {
+		const file = retryFiles.get(uuid);
+		// Remove the error card
+		images = images.filter(img => img.uuid !== uuid);
+		retryFiles.delete(uuid);
+
+		if (file) {
+			// Re-upload the stored file
+			uploadImage(file);
+		}
+	}
+
+	function handleDismiss(uuid: string) {
+		images = images.filter(img => img.uuid !== uuid);
+		retryFiles.delete(uuid);
+	}
 
 	function handleOverwrite() {
 		if (!conflictData) return;
@@ -122,13 +296,23 @@
 		/>
 	{/if}
 
-	<textarea
-		class="editor"
-		value={content}
-		oninput={handleInput}
-		spellcheck="true"
-		placeholder="Start typing..."
-	></textarea>
+	<div class="content-area">
+		<textarea
+			class="editor"
+			value={content}
+			oninput={handleInput}
+			spellcheck="true"
+			placeholder="Start typing..."
+		></textarea>
+
+		<ImageGrid
+			{images}
+			onDelete={handleDeleteImage}
+			onReorder={handleReorder}
+			onRetry={handleRetry}
+			onDismiss={handleDismiss}
+		/>
+	</div>
 </div>
 
 <style>
@@ -139,8 +323,15 @@
 		height: 100dvh;
 	}
 
-	.editor {
+	.content-area {
 		flex: 1;
+		overflow-y: auto;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.editor {
+		min-height: 60vh;
 		width: 100%;
 		padding: var(--space-lg);
 		border: none;
@@ -151,6 +342,7 @@
 		font-size: var(--font-size-lg);
 		line-height: var(--line-height);
 		resize: none;
+		flex-shrink: 0;
 	}
 
 	.editor::placeholder {
