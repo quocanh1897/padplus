@@ -36,6 +36,7 @@ export const load: PageServerLoad = ({ params }) => {
 		slug: pad.slug,
 		content: pad.content,
 		version: pad.version,
+		collaboration_mode: pad.collaboration_mode,
 		images
 	};
 };

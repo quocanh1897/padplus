@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { tick } from 'svelte';
 	import { browser } from '$app/environment';
 	import { invalidateAll } from '$app/navigation';
 	import { debounce } from '$lib/utils/debounce';
@@ -11,7 +12,8 @@
 
 	let content = $state(data.content);
 	let version = $state(data.version);
-	let saveStatus = $state<'saved' | 'saving' | 'unsaved' | 'conflict' | 'error'>('saved');
+	let collaborationMode = $state(data.collaboration_mode as 'last-save-wins' | 'auto-merge');
+	let saveStatus = $state<'saved' | 'saving' | 'unsaved' | 'conflict' | 'error' | 'merged'>('saved');
 	let isSaving = $state(false);
 	let conflictData = $state<{ serverContent: string; serverVersion: number } | null>(null);
 	let hasEdited = $state(false);
@@ -48,8 +50,41 @@
 
 			if (res.ok) {
 				const result = await res.json();
-				version = result.version;
-				saveStatus = 'saved';
+				if (result.merged) {
+					// Auto-merge succeeded -- update content and version
+					// Preserve cursor position (Research Pitfall 6)
+					const textarea = document.querySelector('textarea.editor') as HTMLTextAreaElement;
+					const cursorStart = textarea?.selectionStart ?? 0;
+					const cursorEnd = textarea?.selectionEnd ?? 0;
+
+					content = result.content;
+					version = result.version;
+					saveStatus = 'merged';
+
+					// Restore cursor after Svelte reactive update
+					await tick();
+					if (textarea) {
+						textarea.selectionStart = Math.min(cursorStart, content.length);
+						textarea.selectionEnd = Math.min(cursorEnd, content.length);
+					}
+
+					// Show "Merged" briefly, then transition to "Saved"
+					setTimeout(() => {
+						if (saveStatus === 'merged') saveStatus = 'saved';
+					}, 2000);
+
+					// If had conflicts (overlapping edits), show conflict banner for user review
+					if (result.hadConflicts) {
+						conflictData = {
+							serverContent: result.content,
+							serverVersion: result.version
+						};
+						saveStatus = 'conflict';
+					}
+				} else {
+					version = result.version;
+					saveStatus = 'saved';
+				}
 			} else if (res.status === 409) {
 				const result = await res.json();
 				conflictData = {
@@ -84,11 +119,16 @@
 		}
 	}
 
+	function handleModeChange(mode: 'last-save-wins' | 'auto-merge') {
+		collaborationMode = mode;
+	}
+
 	// Reset state when navigating to a different pad
 	$effect(() => {
 		if (data.slug) {
 			content = data.content;
 			version = data.version;
+			collaborationMode = data.collaboration_mode as 'last-save-wins' | 'auto-merge';
 			initialContent = data.content;
 			saveStatus = 'saved';
 			conflictData = null;
@@ -285,7 +325,7 @@
 </svelte:head>
 
 <div class="pad-layout">
-	<Header slug={data.slug} saveStatus={saveStatus} />
+	<Header slug={data.slug} saveStatus={saveStatus} collaborationMode={collaborationMode} onModeChange={handleModeChange} />
 
 	{#if conflictData}
 		<ConflictBanner

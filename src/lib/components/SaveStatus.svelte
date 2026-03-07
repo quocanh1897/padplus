@@ -1,6 +1,6 @@
 <script lang="ts">
 	type Props = {
-		status: 'saved' | 'saving' | 'unsaved' | 'conflict' | 'error';
+		status: 'saved' | 'saving' | 'unsaved' | 'conflict' | 'error' | 'merged';
 	};
 
 	let { status }: Props = $props();
@@ -10,7 +10,8 @@
 		saving: 'Saving...',
 		unsaved: 'Unsaved changes',
 		conflict: 'Conflict',
-		error: 'Error saving'
+		error: 'Error saving',
+		merged: 'Merged'
 	};
 </script>
 
@@ -44,5 +45,9 @@
 
 	.save-status[data-status='error'] {
 		color: var(--color-error);
+	}
+
+	.save-status[data-status='merged'] {
+		color: var(--color-success);
 	}
 </style>

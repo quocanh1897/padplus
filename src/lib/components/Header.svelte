@@ -1,12 +1,15 @@
 <script lang="ts">
 	import SaveStatus from './SaveStatus.svelte';
+	import ModeSelector from './ModeSelector.svelte';
 
 	type Props = {
 		slug: string;
-		saveStatus: 'saved' | 'saving' | 'unsaved' | 'conflict' | 'error';
+		saveStatus: 'saved' | 'saving' | 'unsaved' | 'conflict' | 'error' | 'merged';
+		collaborationMode: 'last-save-wins' | 'auto-merge';
+		onModeChange: (mode: 'last-save-wins' | 'auto-merge') => void;
 	};
 
-	let { slug, saveStatus }: Props = $props();
+	let { slug, saveStatus, collaborationMode, onModeChange }: Props = $props();
 </script>
 
 <header class="header">
@@ -22,7 +25,9 @@
 
 	<div class="header-right">
 		<SaveStatus status={saveStatus} />
-		<span class="collab-mode">last-save-wins</span>
+		<span class="header-mode">
+			<ModeSelector slug={slug} mode={collaborationMode} onModeChange={onModeChange} />
+		</span>
 	</div>
 </header>
 
@@ -73,21 +78,12 @@
 		flex-shrink: 0;
 	}
 
-	.collab-mode {
-		font-size: var(--font-size-xs);
-		color: var(--color-text-muted);
-		background: var(--color-bg);
-		padding: 2px var(--space-sm);
-		border-radius: var(--radius-sm);
-		white-space: nowrap;
-	}
-
 	@media (max-width: 640px) {
 		.header {
 			padding: var(--space-sm) var(--space-md);
 		}
 
-		.collab-mode {
+		.header-mode {
 			display: none;
 		}
 
