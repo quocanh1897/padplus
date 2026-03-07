@@ -13,7 +13,7 @@ PadPlus delivers a speed-first self-hosted notepad in five phases. Phase 1 build
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Working Notepad** - URL-based pad access with SSR text, auto-save, warm UI, and basic collaboration
-- [ ] **Phase 2: Image Paste** - Clipboard image paste with filesystem storage, lazy-loading, and size limits
+- [x] **Phase 2: Image Paste** - Clipboard image paste with filesystem storage, lazy-loading, and size limits
 - [ ] **Phase 3: Auto-Merge Collaboration** - Concurrent edit merging with per-pad mode selector
 - [ ] **Phase 4: Real-Time Collaboration** - WebSocket live sync with Yjs CRDT
 - [ ] **Phase 5: Docker Deployment** - Containerized self-hosting with one-liner setup
@@ -49,9 +49,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 02-01-PLAN.md -- Backend: DB migration, image CRUD module, API endpoints (upload, serve, delete, reorder), sharp optimization
-- [ ] 02-02-PLAN.md -- Frontend: ImageGrid, ImageCard, Lightbox components, paste handler, SortableJS drag-reorder
-- [ ] 02-03-PLAN.md -- Playwright E2E tests for all image functionality and visual verification checkpoint
+- [x] 02-01-PLAN.md -- Backend: DB migration, image CRUD module, API endpoints (upload, serve, delete, reorder), sharp optimization
+- [x] 02-02-PLAN.md -- Frontend: ImageGrid, ImageCard, Lightbox components, paste handler, SortableJS drag-reorder
+- [x] 02-03-PLAN.md -- Playwright E2E tests for all image functionality and visual verification checkpoint
 
 ### Phase 3: Auto-Merge Collaboration
 **Goal**: Two users can edit different sections of the same pad simultaneously without losing each other's work, and users can select their pad's collaboration mode
@@ -101,7 +101,7 @@ Phases execute in numeric order: 1 --> 2 --> 3 --> 4 --> 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Working Notepad | 3/3 | Complete    | 2026-03-07 |
-| 2. Image Paste | 1/3 | In Progress | - |
+| 2. Image Paste | 3/3 | Complete | 2026-03-08 |
 | 3. Auto-Merge Collaboration | 0/2 | Not started | - |
 | 4. Real-Time Collaboration | 0/2 | Not started | - |
 | 5. Docker Deployment | 0/1 | Not started | - |
