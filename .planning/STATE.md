@@ -8,7 +8,7 @@ progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 11
-  completed_plans: 4
+  completed_plans: 5
 ---
 
 # Project State
@@ -23,28 +23,28 @@ See: .planning/PROJECT.md (updated 2026-03-07)
 ## Current Position
 
 Phase: 2 of 5 (Image Paste)
-Plan: 1 of 3 in current phase
+Plan: 2 of 3 in current phase
 Status: In Progress
-Last activity: 2026-03-08 -- Completed 02-01 backend image infrastructure
+Last activity: 2026-03-08 -- Completed 02-02 frontend image paste experience
 
-Progress: [████░░░░░░] 36%
+Progress: [████▌░░░░░] 45%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
+- Total plans completed: 5
 - Average duration: 3 min
-- Total execution time: 0.2 hours
+- Total execution time: 0.3 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 1. Working Notepad | 3/3 | 8 min | 3 min |
-| 2. Image Paste | 1/3 | 3 min | 3 min |
+| 2. Image Paste | 2/3 | 6 min | 3 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (4m), 01-02 (2m), 01-03 (2m), 02-01 (3m)
+- Last 5 plans: 01-02 (2m), 01-03 (2m), 02-01 (3m), 02-02 (3m)
 - Trend: consistent
 
 *Updated after each plan completion*
@@ -70,6 +70,10 @@ Recent decisions affecting current work:
 - [02-01]: Enabled foreign_keys pragma in db.ts for ON DELETE CASCADE support on images table
 - [02-01]: Used Uint8Array wrapping for Buffer in Response constructor to satisfy TypeScript BodyInit type
 - [02-01]: Created .env.example (not .env) for BODY_SIZE_LIMIT since .env is gitignored
+- [02-02]: Dynamic SortableJS import inside $effect for SSR safety
+- [02-02]: Stored original File objects in Map for retry functionality on upload failures
+- [02-02]: Layout changed to scrollable content-area with min-height 60vh textarea for image grid below
+- [02-02]: Optimistic UI for delete (rollback on failure) and reorder (best-effort persistence)
 
 ### Pending Todos
 
@@ -83,5 +87,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-08
-Stopped at: Completed 02-01-PLAN.md (Backend image infrastructure -- DB, CRUD, API endpoints)
+Stopped at: Completed 02-02-PLAN.md (Frontend image paste experience -- ImageCard, ImageGrid, Lightbox, paste handler)
 Resume file: None
