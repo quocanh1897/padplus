@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-07T19:03:24.907Z"
+last_updated: "2026-03-07T19:42:03Z"
 progress:
   total_phases: 2
   completed_phases: 2
-  total_plans: 6
-  completed_plans: 6
+  total_plans: 7
+  completed_plans: 7
 ---
 
 # Project State
@@ -23,16 +23,16 @@ See: .planning/PROJECT.md (updated 2026-03-07)
 ## Current Position
 
 Phase: 3 of 5 (Auto-Merge Collaboration)
-Plan: 0 of 2 in current phase
+Plan: 1 of 2 in current phase
 Status: In Progress
-Last activity: 2026-03-08 -- Completed Phase 2 (Image Paste) -- all 3 plans done
+Last activity: 2026-03-08 -- Completed 03-01 (Backend merge engine, DB migration, API changes)
 
-Progress: [██████░░░░] 55%
+Progress: [███████░░░] 64%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 6
+- Total plans completed: 7
 - Average duration: 3 min
 - Total execution time: 0.4 hours
 
@@ -42,9 +42,10 @@ Progress: [██████░░░░] 55%
 |-------|-------|-------|----------|
 | 1. Working Notepad | 3/3 | 8 min | 3 min |
 | 2. Image Paste | 3/3 | 10 min | 3 min |
+| 3. Auto-Merge Collaboration | 1/2 | 3 min | 3 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-03 (2m), 02-01 (3m), 02-02 (3m), 02-03 (4m)
+- Last 5 plans: 02-01 (3m), 02-02 (3m), 02-03 (4m), 03-01 (3m)
 - Trend: consistent
 
 *Updated after each plan completion*
@@ -76,6 +77,10 @@ Recent decisions affecting current work:
 - [02-02]: Optimistic UI for delete (rollback on failure) and reorder (best-effort persistence)
 - [02-03]: Sharp-generated test PNGs instead of hand-crafted byte arrays (libspng rejects minimal manual PNGs)
 - [02-03]: API-first E2E test setup: upload via POST, then verify frontend display separately
+- [03-01]: Used diff3Merge (structured blocks) instead of merge() to avoid embedding conflict markers in content
+- [03-01]: Best-effort conflict resolution: concatenate client then server version at conflict points
+- [03-01]: Merge path wrapped in db.transaction() with BEGIN IMMEDIATE for race condition safety
+- [03-01]: base_content updated to new content on every save to maintain common ancestor for merges
 
 ### Pending Todos
 
@@ -89,5 +94,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-08
-Stopped at: Completed 02-03-PLAN.md (E2E tests and visual verification -- Phase 2 complete)
+Stopped at: Completed 03-01-PLAN.md (Backend merge engine, DB migration, API changes)
 Resume file: None
