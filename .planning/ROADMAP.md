@@ -30,12 +30,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Two users edit the same pad; the last save wins but a stale-version save is rejected with a visible conflict warning (no silent data loss)
   4. Landing page has a URL bar where user can type a pad name and navigate directly to it
   5. UI feels warm and inviting on both desktop and mobile -- soft color palette, rounded corners, readable typography, no layout breakage on small screens
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 01-01: TBD
-- [ ] 01-02: TBD
-- [ ] 01-03: TBD
+- [ ] 01-01-PLAN.md -- SvelteKit project scaffold, SQLite database layer, CSS design system
+- [ ] 01-02-PLAN.md -- Pad editor page with SSR, auto-save, conflict handling, landing page
+- [ ] 01-03-PLAN.md -- Playwright E2E test suite and visual verification checkpoint
 
 ### Phase 2: Image Paste
 **Goal**: Users can paste images from their clipboard directly into any pad, with images stored locally and loaded without blocking text
@@ -99,7 +99,7 @@ Phases execute in numeric order: 1 --> 2 --> 3 --> 4 --> 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Working Notepad | 0/3 | Not started | - |
+| 1. Working Notepad | 0/3 | Planning complete | - |
 | 2. Image Paste | 0/2 | Not started | - |
 | 3. Auto-Merge Collaboration | 0/2 | Not started | - |
 | 4. Real-Time Collaboration | 0/2 | Not started | - |
