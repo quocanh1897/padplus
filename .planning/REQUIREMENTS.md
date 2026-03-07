@@ -18,10 +18,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Images
 
-- [ ] **IMG-01**: User can paste images from clipboard directly into a pad
-- [ ] **IMG-02**: Images stored on local filesystem with generated filenames
+- [x] **IMG-01**: User can paste images from clipboard directly into a pad
+- [x] **IMG-02**: Images stored on local filesystem with generated filenames
 - [ ] **IMG-03**: Images lazy-load -- never block text rendering
-- [ ] **IMG-04**: Image uploads have size limits (per-image and per-pad quota)
+- [x] **IMG-04**: Image uploads have size limits (per-image and per-pad quota)
 
 ### Collaboration
 
@@ -81,10 +81,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CORE-04 | Phase 1: Working Notepad | Complete |
 | CORE-05 | Phase 1: Working Notepad | Complete |
 | CORE-06 | Phase 1: Working Notepad | Complete |
-| IMG-01 | Phase 2: Image Paste | Pending |
-| IMG-02 | Phase 2: Image Paste | Pending |
+| IMG-01 | Phase 2: Image Paste | Complete |
+| IMG-02 | Phase 2: Image Paste | Complete |
 | IMG-03 | Phase 2: Image Paste | Pending |
-| IMG-04 | Phase 2: Image Paste | Pending |
+| IMG-04 | Phase 2: Image Paste | Complete |
 | COLLAB-01 | Phase 1: Working Notepad | Complete |
 | COLLAB-02 | Phase 3: Auto-Merge Collaboration | Pending |
 | COLLAB-03 | Phase 4: Real-Time Collaboration | Pending |
