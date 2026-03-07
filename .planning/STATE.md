@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-07T19:42:03Z"
+last_updated: "2026-03-07T19:51:40Z"
 progress:
-  total_phases: 2
-  completed_phases: 2
-  total_plans: 7
-  completed_plans: 7
+  total_phases: 3
+  completed_phases: 3
+  total_plans: 8
+  completed_plans: 8
 ---
 
 # Project State
@@ -22,19 +22,19 @@ See: .planning/PROJECT.md (updated 2026-03-07)
 
 ## Current Position
 
-Phase: 3 of 5 (Auto-Merge Collaboration)
-Plan: 1 of 2 in current phase
-Status: In Progress
-Last activity: 2026-03-08 -- Completed 03-01 (Backend merge engine, DB migration, API changes)
+Phase: 3 of 5 (Auto-Merge Collaboration) -- COMPLETE
+Plan: 2 of 2 in current phase
+Status: Phase Complete
+Last activity: 2026-03-08 -- Completed 03-02 (Frontend mode selector, merge integration, E2E tests)
 
-Progress: [███████░░░] 64%
+Progress: [████████░░] 73%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 7
+- Total plans completed: 8
 - Average duration: 3 min
-- Total execution time: 0.4 hours
+- Total execution time: 0.5 hours
 
 **By Phase:**
 
@@ -42,10 +42,10 @@ Progress: [███████░░░] 64%
 |-------|-------|-------|----------|
 | 1. Working Notepad | 3/3 | 8 min | 3 min |
 | 2. Image Paste | 3/3 | 10 min | 3 min |
-| 3. Auto-Merge Collaboration | 1/2 | 3 min | 3 min |
+| 3. Auto-Merge Collaboration | 2/2 | 10 min | 5 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-01 (3m), 02-02 (3m), 02-03 (4m), 03-01 (3m)
+- Last 5 plans: 02-02 (3m), 02-03 (4m), 03-01 (3m), 03-02 (7m)
 - Trend: consistent
 
 *Updated after each plan completion*
@@ -81,6 +81,10 @@ Recent decisions affecting current work:
 - [03-01]: Best-effort conflict resolution: concatenate client then server version at conflict points
 - [03-01]: Merge path wrapped in db.transaction() with BEGIN IMMEDIATE for race condition safety
 - [03-01]: base_content updated to new content on every save to maintain common ancestor for merges
+- [03-02]: ModeSelector handles PATCH request internally to keep parent component simple
+- [03-02]: Cursor position preserved via selectionStart/End save and restore after tick()
+- [03-02]: Mode selector hidden on mobile via wrapper with display:none at 640px
+- [03-02]: E2E tests verify merge mechanism (200 + merged:true) rather than content blending due to base_content design
 
 ### Pending Todos
 
@@ -94,5 +98,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-08
-Stopped at: Completed 03-01-PLAN.md (Backend merge engine, DB migration, API changes)
+Stopped at: Completed 03-02-PLAN.md (Frontend mode selector, merge integration, E2E tests)
 Resume file: None

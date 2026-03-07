@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Working Notepad** - URL-based pad access with SSR text, auto-save, warm UI, and basic collaboration
 - [x] **Phase 2: Image Paste** - Clipboard image paste with filesystem storage, lazy-loading, and size limits
-- [ ] **Phase 3: Auto-Merge Collaboration** - Concurrent edit merging with per-pad mode selector
+- [x] **Phase 3: Auto-Merge Collaboration** - Concurrent edit merging with per-pad mode selector
 - [ ] **Phase 4: Real-Time Collaboration** - WebSocket live sync with Yjs CRDT
 - [ ] **Phase 5: Docker Deployment** - Containerized self-hosting with one-liner setup
 
@@ -64,8 +64,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 03-01-PLAN.md -- Backend: DB migration (base_content), node-diff3 merge engine, extended PUT handler, mode PATCH endpoint
-- [ ] 03-02-PLAN.md -- Frontend: ModeSelector dropdown, merge response handling, SaveStatus merged state, Playwright E2E tests
+- [x] 03-01-PLAN.md -- Backend: DB migration (base_content), node-diff3 merge engine, extended PUT handler, mode PATCH endpoint
+- [x] 03-02-PLAN.md -- Frontend: ModeSelector dropdown, merge response handling, SaveStatus merged state, Playwright E2E tests
 
 ### Phase 4: Real-Time Collaboration
 **Goal**: Multiple users can edit the same pad simultaneously with character-by-character live sync
@@ -102,6 +102,6 @@ Phases execute in numeric order: 1 --> 2 --> 3 --> 4 --> 5
 |-------|----------------|--------|-----------|
 | 1. Working Notepad | 3/3 | Complete    | 2026-03-07 |
 | 2. Image Paste | 3/3 | Complete    | 2026-03-07 |
-| 3. Auto-Merge Collaboration | 0/2 | Not started | - |
+| 3. Auto-Merge Collaboration | 2/2 | Complete    | 2026-03-08 |
 | 4. Real-Time Collaboration | 0/2 | Not started | - |
 | 5. Docker Deployment | 0/1 | Not started | - |
