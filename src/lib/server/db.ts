@@ -56,4 +56,14 @@ if (currentVersion < 2) {
 	db.pragma('user_version = 2');
 }
 
+currentVersion = db.pragma('user_version', { simple: true }) as number;
+
+if (currentVersion < 3) {
+	db.exec(`
+		ALTER TABLE pads ADD COLUMN base_content TEXT NOT NULL DEFAULT '';
+		UPDATE pads SET base_content = content;
+	`);
+	db.pragma('user_version = 3');
+}
+
 export default db;

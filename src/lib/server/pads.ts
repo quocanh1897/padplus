@@ -1,4 +1,5 @@
 import db from './db';
+import { mergeText } from './merge';
 
 export interface Pad {
 	id: number;
@@ -38,13 +39,35 @@ function validateSlug(slug: string): void {
 const getBySlugStmt = db.prepare<[string], Pad>('SELECT * FROM pads WHERE slug = ?');
 
 const insertStmt = db.prepare<[string]>(
-	"INSERT INTO pads (slug, content) VALUES (?, '')"
+	"INSERT INTO pads (slug, content, base_content) VALUES (?, '', '')"
 );
 
 const updateStmt = db.prepare<[string, string, number]>(
 	`UPDATE pads
 	 SET content = ?, version = version + 1, updated_at = datetime('now')
 	 WHERE slug = ? AND version = ?`
+);
+
+// Extended statements for merge support
+const getModeStmt = db.prepare<
+	[string],
+	{ collaboration_mode: string; content: string; base_content: string; version: number }
+>('SELECT collaboration_mode, content, base_content, version FROM pads WHERE slug = ?');
+
+const updateWithBaseStmt = db.prepare<[string, string, string, number]>(
+	`UPDATE pads
+	 SET content = ?, base_content = ?, version = version + 1, updated_at = datetime('now')
+	 WHERE slug = ? AND version = ?`
+);
+
+const forceUpdateStmt = db.prepare<[string, string, number, string]>(
+	`UPDATE pads
+	 SET content = ?, base_content = ?, version = ?, updated_at = datetime('now')
+	 WHERE slug = ?`
+);
+
+const updateModeStmt = db.prepare<[string, string]>(
+	`UPDATE pads SET collaboration_mode = ? WHERE slug = ?`
 );
 
 /**
@@ -63,27 +86,86 @@ export function createPad(slug: string): Pad {
 	return getBySlugStmt.get(slug)!;
 }
 
+export type SaveResult =
+	| { type: 'saved'; pad: Pad }
+	| { type: 'merged'; pad: Pad; hadConflicts: boolean }
+	| { type: 'conflict'; pad: Pad };
+
 /**
- * Save pad content with optimistic concurrency check.
- * Returns { conflict: true, pad } if the version doesn't match,
- * or { conflict: false, pad } on success.
+ * Save pad content with optimistic concurrency check and auto-merge support.
+ * For auto-merge pads, version mismatches trigger a three-way merge.
+ * For last-save-wins pads, version mismatches return a conflict.
  */
 export function savePad(
 	slug: string,
 	content: string,
 	expectedVersion: number
-): { conflict: boolean; pad: Pad } {
-	const result = updateStmt.run(content, slug, expectedVersion);
+): SaveResult {
+	// Try normal version-checked update first (also sets base_content)
+	const result = updateWithBaseStmt.run(content, content, slug, expectedVersion);
 
-	if (result.changes === 0) {
-		// Version mismatch -- return current state for conflict resolution
-		const current = getBySlugStmt.get(slug);
-		if (!current) {
-			throw new Error(`Pad not found: "${slug}"`);
-		}
-		return { conflict: true, pad: current };
+	if (result.changes > 0) {
+		return { type: 'saved', pad: getBySlugStmt.get(slug)! };
 	}
 
-	const updated = getBySlugStmt.get(slug)!;
-	return { conflict: false, pad: updated };
+	// Version mismatch -- check collaboration mode
+	const current = getModeStmt.get(slug);
+	if (!current) {
+		throw new Error(`Pad not found: "${slug}"`);
+	}
+
+	if (current.collaboration_mode !== 'auto-merge') {
+		// Last-save-wins: return conflict (unchanged behavior)
+		return { type: 'conflict', pad: getBySlugStmt.get(slug)! };
+	}
+
+	// Auto-merge: attempt three-way merge inside a transaction
+	// Wrap read + merge + write in transaction to prevent race conditions
+	// better-sqlite3's transaction() uses BEGIN IMMEDIATE which acquires write lock before reading
+	const mergeTransaction = db.transaction(() => {
+		// Re-read inside transaction to ensure consistent state
+		const latest = getModeStmt.get(slug);
+		if (!latest) {
+			throw new Error(`Pad not found: "${slug}"`);
+		}
+
+		const mergeResult = mergeText(latest.base_content, latest.content, content);
+
+		// Save merged result with incremented version
+		forceUpdateStmt.run(mergeResult.content, mergeResult.content, latest.version + 1, slug);
+
+		return {
+			pad: getBySlugStmt.get(slug)!,
+			hadConflicts: !mergeResult.success
+		};
+	});
+
+	const mergeOutcome = mergeTransaction();
+	return {
+		type: 'merged',
+		pad: mergeOutcome.pad,
+		hadConflicts: mergeOutcome.hadConflicts
+	};
+}
+
+/**
+ * Update the collaboration mode for a pad.
+ * @param slug - The pad slug
+ * @param mode - Must be 'last-save-wins' or 'auto-merge'
+ * @returns The updated pad
+ */
+export function updateCollaborationMode(
+	slug: string,
+	mode: 'last-save-wins' | 'auto-merge'
+): Pad {
+	if (mode !== 'last-save-wins' && mode !== 'auto-merge') {
+		throw new Error(`Invalid mode: "${mode}". Must be "last-save-wins" or "auto-merge".`);
+	}
+
+	const result = updateModeStmt.run(mode, slug);
+	if (result.changes === 0) {
+		throw new Error(`Pad not found: "${slug}"`);
+	}
+
+	return getBySlugStmt.get(slug)!;
 }
