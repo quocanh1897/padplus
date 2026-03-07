@@ -33,7 +33,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 3 plans
 
 Plans:
-- [ ] 01-01-PLAN.md -- SvelteKit project scaffold, SQLite database layer, CSS design system
+- [x] 01-01-PLAN.md -- SvelteKit project scaffold, SQLite database layer, CSS design system
 - [ ] 01-02-PLAN.md -- Pad editor page with SSR, auto-save, conflict handling, landing page
 - [ ] 01-03-PLAN.md -- Playwright E2E test suite and visual verification checkpoint
 

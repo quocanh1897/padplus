@@ -13,7 +13,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **CORE-02**: Text content renders server-side before JavaScript loads
 - [ ] **CORE-03**: Pad content auto-saves after brief idle (no save button)
 - [ ] **CORE-04**: Save uses optimistic concurrency (version check prevents silent overwrites)
-- [ ] **CORE-05**: UI uses warm, inviting aesthetic -- soft tones, rounded corners, good typography
+- [x] **CORE-05**: UI uses warm, inviting aesthetic -- soft tones, rounded corners, good typography
 - [ ] **CORE-06**: Layout is responsive and usable on mobile
 
 ### Images
@@ -36,8 +36,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Infrastructure
 
-- [ ] **INFRA-01**: SQLite with WAL mode for storage
-- [ ] **INFRA-02**: Single-process server, trivially self-hostable
+- [x] **INFRA-01**: SQLite with WAL mode for storage
+- [x] **INFRA-02**: Single-process server, trivially self-hostable
 - [ ] **INFRA-03**: Docker deployment with one-liner command
 
 ## v2 Requirements
@@ -79,7 +79,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CORE-02 | Phase 1: Working Notepad | Pending |
 | CORE-03 | Phase 1: Working Notepad | Pending |
 | CORE-04 | Phase 1: Working Notepad | Pending |
-| CORE-05 | Phase 1: Working Notepad | Pending |
+| CORE-05 | Phase 1: Working Notepad | Complete |
 | CORE-06 | Phase 1: Working Notepad | Pending |
 | IMG-01 | Phase 2: Image Paste | Pending |
 | IMG-02 | Phase 2: Image Paste | Pending |
@@ -90,8 +90,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | COLLAB-03 | Phase 4: Real-Time Collaboration | Pending |
 | COLLAB-04 | Phase 3: Auto-Merge Collaboration | Pending |
 | DASH-01 | Phase 1: Working Notepad | Pending |
-| INFRA-01 | Phase 1: Working Notepad | Pending |
-| INFRA-02 | Phase 1: Working Notepad | Pending |
+| INFRA-01 | Phase 1: Working Notepad | Complete |
+| INFRA-02 | Phase 1: Working Notepad | Complete |
 | INFRA-03 | Phase 5: Docker Deployment | Pending |
 
 **Coverage:**
