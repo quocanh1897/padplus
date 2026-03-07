@@ -9,12 +9,12 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Core
 
-- [ ] **CORE-01**: User can navigate to any URL path and get a working pad instantly
-- [ ] **CORE-02**: Text content renders server-side before JavaScript loads
-- [ ] **CORE-03**: Pad content auto-saves after brief idle (no save button)
-- [ ] **CORE-04**: Save uses optimistic concurrency (version check prevents silent overwrites)
+- [x] **CORE-01**: User can navigate to any URL path and get a working pad instantly
+- [x] **CORE-02**: Text content renders server-side before JavaScript loads
+- [x] **CORE-03**: Pad content auto-saves after brief idle (no save button)
+- [x] **CORE-04**: Save uses optimistic concurrency (version check prevents silent overwrites)
 - [x] **CORE-05**: UI uses warm, inviting aesthetic -- soft tones, rounded corners, good typography
-- [ ] **CORE-06**: Layout is responsive and usable on mobile
+- [x] **CORE-06**: Layout is responsive and usable on mobile
 
 ### Images
 
@@ -25,14 +25,14 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Collaboration
 
-- [ ] **COLLAB-01**: Last-save-wins mode (default) -- simple save with version check
+- [x] **COLLAB-01**: Last-save-wins mode (default) -- simple save with version check
 - [ ] **COLLAB-02**: Auto-merge mode -- concurrent edits merged gracefully
 - [ ] **COLLAB-03**: Real-time mode -- WebSocket live sync between editors
 - [ ] **COLLAB-04**: User can select collaboration mode per pad
 
 ### Dashboard
 
-- [ ] **DASH-01**: Landing page has URL bar for direct pad navigation
+- [x] **DASH-01**: Landing page has URL bar for direct pad navigation
 
 ### Infrastructure
 
@@ -75,21 +75,21 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CORE-01 | Phase 1: Working Notepad | Pending |
-| CORE-02 | Phase 1: Working Notepad | Pending |
-| CORE-03 | Phase 1: Working Notepad | Pending |
-| CORE-04 | Phase 1: Working Notepad | Pending |
+| CORE-01 | Phase 1: Working Notepad | Complete |
+| CORE-02 | Phase 1: Working Notepad | Complete |
+| CORE-03 | Phase 1: Working Notepad | Complete |
+| CORE-04 | Phase 1: Working Notepad | Complete |
 | CORE-05 | Phase 1: Working Notepad | Complete |
-| CORE-06 | Phase 1: Working Notepad | Pending |
+| CORE-06 | Phase 1: Working Notepad | Complete |
 | IMG-01 | Phase 2: Image Paste | Pending |
 | IMG-02 | Phase 2: Image Paste | Pending |
 | IMG-03 | Phase 2: Image Paste | Pending |
 | IMG-04 | Phase 2: Image Paste | Pending |
-| COLLAB-01 | Phase 1: Working Notepad | Pending |
+| COLLAB-01 | Phase 1: Working Notepad | Complete |
 | COLLAB-02 | Phase 3: Auto-Merge Collaboration | Pending |
 | COLLAB-03 | Phase 4: Real-Time Collaboration | Pending |
 | COLLAB-04 | Phase 3: Auto-Merge Collaboration | Pending |
-| DASH-01 | Phase 1: Working Notepad | Pending |
+| DASH-01 | Phase 1: Working Notepad | Complete |
 | INFRA-01 | Phase 1: Working Notepad | Complete |
 | INFRA-02 | Phase 1: Working Notepad | Complete |
 | INFRA-03 | Phase 5: Docker Deployment | Pending |
