@@ -75,11 +75,12 @@ Plans:
   1. Two users open the same pad in real-time mode and see each other's keystrokes appear within ~200ms
   2. User's connection drops and reconnects -- edits made during disconnection are synced without data loss
   3. Real-time mode selector option is available alongside last-save-wins and auto-merge, and switching modes takes effect immediately
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 04-01: TBD
-- [ ] 04-02: TBD
+- [ ] 04-01-PLAN.md -- Backend: Yjs dependencies, DB migration (yjs_state), WebSocket server, Vite plugin, production server entry
+- [ ] 04-02-PLAN.md -- Frontend: RealtimeEditor with Yjs binding, ConnectionDot, ModeSelector/Header/page integration
+- [ ] 04-03-PLAN.md -- Playwright E2E tests for real-time sync and visual verification checkpoint
 
 ### Phase 5: Docker Deployment
 **Goal**: Anyone can self-host PadPlus with a single Docker command and zero configuration
@@ -103,5 +104,5 @@ Phases execute in numeric order: 1 --> 2 --> 3 --> 4 --> 5
 | 1. Working Notepad | 3/3 | Complete    | 2026-03-07 |
 | 2. Image Paste | 3/3 | Complete    | 2026-03-07 |
 | 3. Auto-Merge Collaboration | 2/2 | Complete    | 2026-03-07 |
-| 4. Real-Time Collaboration | 0/2 | Not started | - |
+| 4. Real-Time Collaboration | 0/3 | Not started | - |
 | 5. Docker Deployment | 0/1 | Not started | - |
