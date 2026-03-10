@@ -17,8 +17,8 @@ export const PATCH: RequestHandler = async ({ params, request }) => {
 
 	const { mode } = body as { mode: unknown };
 
-	if (mode !== 'last-save-wins' && mode !== 'auto-merge') {
-		error(400, 'Mode must be "last-save-wins" or "auto-merge"');
+	if (mode !== 'last-save-wins' && mode !== 'auto-merge' && mode !== 'real-time') {
+		error(400, 'Mode must be "last-save-wins", "auto-merge", or "real-time"');
 	}
 
 	try {

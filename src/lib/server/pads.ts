@@ -156,15 +156,17 @@ export function savePad(
 /**
  * Update the collaboration mode for a pad.
  * @param slug - The pad slug
- * @param mode - Must be 'last-save-wins' or 'auto-merge'
+ * @param mode - Must be 'last-save-wins', 'auto-merge', or 'real-time'
  * @returns The updated pad
  */
 export function updateCollaborationMode(
 	slug: string,
-	mode: 'last-save-wins' | 'auto-merge'
+	mode: 'last-save-wins' | 'auto-merge' | 'real-time'
 ): Pad {
-	if (mode !== 'last-save-wins' && mode !== 'auto-merge') {
-		throw new Error(`Invalid mode: "${mode}". Must be "last-save-wins" or "auto-merge".`);
+	if (mode !== 'last-save-wins' && mode !== 'auto-merge' && mode !== 'real-time') {
+		throw new Error(
+			`Invalid mode: "${mode}". Must be "last-save-wins", "auto-merge", or "real-time".`
+		);
 	}
 
 	const result = updateModeStmt.run(mode, slug);

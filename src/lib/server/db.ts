@@ -66,4 +66,13 @@ if (currentVersion < 3) {
 	db.pragma('user_version = 3');
 }
 
+currentVersion = db.pragma('user_version', { simple: true }) as number;
+
+if (currentVersion < 4) {
+	db.exec(`
+		ALTER TABLE pads ADD COLUMN yjs_state BLOB DEFAULT NULL;
+	`);
+	db.pragma('user_version = 4');
+}
+
 export default db;
