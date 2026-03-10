@@ -27,7 +27,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **COLLAB-01**: Last-save-wins mode (default) -- simple save with version check
 - [x] **COLLAB-02**: Auto-merge mode -- concurrent edits merged gracefully
-- [ ] **COLLAB-03**: Real-time mode -- WebSocket live sync between editors
+- [x] **COLLAB-03**: Real-time mode -- WebSocket live sync between editors
 - [x] **COLLAB-04**: User can select collaboration mode per pad
 
 ### Dashboard
@@ -87,7 +87,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | IMG-04 | Phase 2: Image Paste | Complete |
 | COLLAB-01 | Phase 1: Working Notepad | Complete |
 | COLLAB-02 | Phase 3: Auto-Merge Collaboration | Complete |
-| COLLAB-03 | Phase 4: Real-Time Collaboration | Pending |
+| COLLAB-03 | Phase 4: Real-Time Collaboration | Complete |
 | COLLAB-04 | Phase 3: Auto-Merge Collaboration | Complete |
 | DASH-01 | Phase 1: Working Notepad | Complete |
 | INFRA-01 | Phase 1: Working Notepad | Complete |

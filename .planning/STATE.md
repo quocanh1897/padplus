@@ -2,13 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: unknown
-last_updated: "2026-03-07T20:01:01.152Z"
+status: executing
+stopped_at: Completed 04-01-PLAN.md
+last_updated: "2026-03-10T04:27:10.641Z"
+last_activity: 2026-03-10 -- Completed 04-01 (WebSocket server with Yjs CRDT sync backend)
 progress:
-  total_phases: 3
+  total_phases: 5
   completed_phases: 3
-  total_plans: 8
-  completed_plans: 8
+  total_plans: 11
+  completed_plans: 9
+  percent: 82
 ---
 
 # Project State
@@ -18,23 +21,23 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-07)
 
 **Core value:** Text content loads as fast as physically possible -- everything else is secondary to instant text delivery.
-**Current focus:** Phase 3: Auto-Merge Collaboration
+**Current focus:** Phase 4: Real-Time Collaboration
 
 ## Current Position
 
-Phase: 3 of 5 (Auto-Merge Collaboration) -- COMPLETE
-Plan: 2 of 2 in current phase
-Status: Phase Complete
-Last activity: 2026-03-08 -- Completed 03-02 (Frontend mode selector, merge integration, E2E tests)
+Phase: 4 of 5 (Real-Time Collaboration)
+Plan: 1 of 3 in current phase
+Status: In Progress
+Last activity: 2026-03-10 -- Completed 04-01 (WebSocket server with Yjs CRDT sync backend)
 
-Progress: [████████░░] 73%
+Progress: [████████░░] 82%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 8
+- Total plans completed: 9
 - Average duration: 3 min
-- Total execution time: 0.5 hours
+- Total execution time: 0.6 hours
 
 **By Phase:**
 
@@ -43,12 +46,14 @@ Progress: [████████░░] 73%
 | 1. Working Notepad | 3/3 | 8 min | 3 min |
 | 2. Image Paste | 3/3 | 10 min | 3 min |
 | 3. Auto-Merge Collaboration | 2/2 | 10 min | 5 min |
+| 4. Real-Time Collaboration | 1/3 | 4 min | 4 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-02 (3m), 02-03 (4m), 03-01 (3m), 03-02 (7m)
+- Last 5 plans: 02-03 (4m), 03-01 (3m), 03-02 (7m), 04-01 (4m)
 - Trend: consistent
 
 *Updated after each plan completion*
+| Phase 04 P01 | 4 | 2 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -85,6 +90,11 @@ Recent decisions affecting current work:
 - [03-02]: Cursor position preserved via selectionStart/End save and restore after tick()
 - [03-02]: Mode selector hidden on mobile via wrapper with display:none at 640px
 - [03-02]: E2E tests verify merge mechanism (200 + merged:true) rather than content blending due to base_content design
+- [04-01]: Synchronous room creation (no async gap) to prevent race conditions per Yjs research
+- [04-01]: 30s cleanup timer on empty rooms; debounced persistence at 500ms with immediate save on last disconnect
+- [04-01]: Self-contained server/index.js for production (own DB connection, avoids SvelteKit build import complexity)
+- [04-01]: Vite plugin path-filtered to /ws/pads/* and ordered before sveltekit() to preserve HMR
+- [Phase 04]: Synchronous room creation to avoid race conditions; 30s cleanup timer; debounced persistence at 500ms
 
 ### Pending Todos
 
@@ -97,6 +107,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-08
-Stopped at: Completed 03-02-PLAN.md (Frontend mode selector, merge integration, E2E tests)
+Last session: 2026-03-10T04:27:06.353Z
+Stopped at: Completed 04-01-PLAN.md
 Resume file: None
