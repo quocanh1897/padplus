@@ -1,7 +1,7 @@
 import { json, error } from '@sveltejs/kit';
 import { readFile, unlink } from 'node:fs/promises';
-import path from 'node:path';
 import { getImageByUuid, deleteImage } from '$lib/server/images';
+import { getUploadFilePath } from '$lib/server/upload-path';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async ({ params }) => {
@@ -15,13 +15,7 @@ export const GET: RequestHandler = async ({ params }) => {
 		error(404, 'Image not found');
 	}
 
-	const filePath = path.join(
-		process.cwd(),
-		'data',
-		'uploads',
-		String(image.pad_id),
-		image.filename
-	);
+	const filePath = getUploadFilePath(image.pad_id, image.filename);
 
 	let data: Buffer;
 	try {
@@ -51,13 +45,7 @@ export const DELETE: RequestHandler = async ({ params }) => {
 	}
 
 	// Delete filesystem file first (safer order -- see research Pitfall 5)
-	const filePath = path.join(
-		process.cwd(),
-		'data',
-		'uploads',
-		String(image.pad_id),
-		image.filename
-	);
+	const filePath = getUploadFilePath(image.pad_id, image.filename);
 
 	try {
 		await unlink(filePath);

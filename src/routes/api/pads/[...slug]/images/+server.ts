@@ -4,6 +4,7 @@ import { randomUUID } from 'node:crypto';
 import { writeFile, mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { getPadBySlug, createPad } from '$lib/server/pads';
+import { getUploadDir } from '$lib/server/upload-path';
 import {
 	insertImage,
 	getImagesByPadId,
@@ -72,7 +73,7 @@ export const POST: RequestHandler = async ({ params, request }) => {
 	const filename = `${uuid}.webp`;
 
 	// Create upload directory and write file
-	const uploadDir = path.join(process.cwd(), 'data', 'uploads', String(pad.id));
+	const uploadDir = getUploadDir(pad.id);
 	await mkdir(uploadDir, { recursive: true });
 	await writeFile(path.join(uploadDir, filename), optimized);
 
