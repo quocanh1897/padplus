@@ -38,7 +38,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **INFRA-01**: SQLite with WAL mode for storage
 - [x] **INFRA-02**: Single-process server, trivially self-hostable
-- [ ] **INFRA-03**: Docker deployment with one-liner command
+- [x] **INFRA-03**: Docker deployment with one-liner command
 
 ## v2 Requirements
 
@@ -92,7 +92,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DASH-01 | Phase 1: Working Notepad | Complete |
 | INFRA-01 | Phase 1: Working Notepad | Complete |
 | INFRA-02 | Phase 1: Working Notepad | Complete |
-| INFRA-03 | Phase 5: Docker Deployment | Pending |
+| INFRA-03 | Phase 5: Docker Deployment | Complete |
 
 **Coverage:**
 - v1 requirements: 18 total
