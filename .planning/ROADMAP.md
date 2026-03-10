@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Working Notepad** - URL-based pad access with SSR text, auto-save, warm UI, and basic collaboration
 - [x] **Phase 2: Image Paste** - Clipboard image paste with filesystem storage, lazy-loading, and size limits
 - [x] **Phase 3: Auto-Merge Collaboration** - Concurrent edit merging with per-pad mode selector
-- [ ] **Phase 4: Real-Time Collaboration** - WebSocket live sync with Yjs CRDT
+- [x] **Phase 4: Real-Time Collaboration** - WebSocket live sync with Yjs CRDT
 - [ ] **Phase 5: Docker Deployment** - Containerized self-hosting with one-liner setup
 
 ## Phase Details
@@ -78,9 +78,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 04-01-PLAN.md -- Backend: Yjs dependencies, DB migration (yjs_state), WebSocket server, Vite plugin, production server entry
-- [ ] 04-02-PLAN.md -- Frontend: RealtimeEditor with Yjs binding, ConnectionDot, ModeSelector/Header/page integration
-- [ ] 04-03-PLAN.md -- Playwright E2E tests for real-time sync and visual verification checkpoint
+- [x] 04-01-PLAN.md -- Backend: Yjs dependencies, DB migration (yjs_state), WebSocket server, Vite plugin, production server entry
+- [x] 04-02-PLAN.md -- Frontend: RealtimeEditor with Yjs binding, ConnectionDot, ModeSelector/Header/page integration
+- [x] 04-03-PLAN.md -- Playwright E2E tests for real-time sync and visual verification checkpoint
 
 ### Phase 5: Docker Deployment
 **Goal**: Anyone can self-host PadPlus with a single Docker command and zero configuration
@@ -104,5 +104,5 @@ Phases execute in numeric order: 1 --> 2 --> 3 --> 4 --> 5
 | 1. Working Notepad | 3/3 | Complete    | 2026-03-07 |
 | 2. Image Paste | 3/3 | Complete    | 2026-03-07 |
 | 3. Auto-Merge Collaboration | 2/2 | Complete    | 2026-03-07 |
-| 4. Real-Time Collaboration | 0/3 | Not started | - |
+| 4. Real-Time Collaboration | 3/3 | Complete    | 2026-03-10 |
 | 5. Docker Deployment | 0/1 | Not started | - |
