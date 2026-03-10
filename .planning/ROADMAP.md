@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Image Paste** - Clipboard image paste with filesystem storage, lazy-loading, and size limits
 - [x] **Phase 3: Auto-Merge Collaboration** - Concurrent edit merging with per-pad mode selector
 - [x] **Phase 4: Real-Time Collaboration** - WebSocket live sync with Yjs CRDT
-- [ ] **Phase 5: Docker Deployment** - Containerized self-hosting with one-liner setup
+- [x] **Phase 5: Docker Deployment** - Containerized self-hosting with one-liner setup
 
 ## Phase Details
 
@@ -92,8 +92,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 05-01-PLAN.md -- Health endpoint, UPLOAD_DIR env var, Dockerfile, compose files, Caddyfile, DEPLOY.md
-- [ ] 05-02-PLAN.md -- Docker E2E tests (Playwright + test script) and visual verification checkpoint
+- [x] 05-01-PLAN.md -- Health endpoint, UPLOAD_DIR env var, Dockerfile, compose files, Caddyfile, DEPLOY.md
+- [x] 05-02-PLAN.md -- Docker E2E tests (Playwright + test script) and visual verification checkpoint
 
 ## Progress
 
@@ -106,4 +106,4 @@ Phases execute in numeric order: 1 --> 2 --> 3 --> 4 --> 5
 | 2. Image Paste | 3/3 | Complete    | 2026-03-07 |
 | 3. Auto-Merge Collaboration | 2/2 | Complete    | 2026-03-07 |
 | 4. Real-Time Collaboration | 3/3 | Complete    | 2026-03-10 |
-| 5. Docker Deployment | 0/2 | Not started | - |
+| 5. Docker Deployment | 2/2 | Complete    | 2026-03-10 |
