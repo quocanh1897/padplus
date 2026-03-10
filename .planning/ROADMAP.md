@@ -89,10 +89,11 @@ Plans:
 **Success Criteria** (what must be TRUE):
   1. User runs a single `docker run` or `docker compose up` command and PadPlus is accessible in a browser with no additional setup
   2. Data (SQLite database and images) persists across container restarts via mounted volumes
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 05-01: TBD
+- [ ] 05-01-PLAN.md -- Health endpoint, UPLOAD_DIR env var, Dockerfile, compose files, Caddyfile, DEPLOY.md
+- [ ] 05-02-PLAN.md -- Docker E2E tests (Playwright + test script) and visual verification checkpoint
 
 ## Progress
 
@@ -105,4 +106,4 @@ Phases execute in numeric order: 1 --> 2 --> 3 --> 4 --> 5
 | 2. Image Paste | 3/3 | Complete    | 2026-03-07 |
 | 3. Auto-Merge Collaboration | 2/2 | Complete    | 2026-03-07 |
 | 4. Real-Time Collaboration | 3/3 | Complete    | 2026-03-10 |
-| 5. Docker Deployment | 0/1 | Not started | - |
+| 5. Docker Deployment | 0/2 | Not started | - |
