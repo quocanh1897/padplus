@@ -27,7 +27,7 @@ if (currentVersion < 1) {
 			slug TEXT NOT NULL UNIQUE,
 			content TEXT NOT NULL DEFAULT '',
 			version INTEGER NOT NULL DEFAULT 1,
-			collaboration_mode TEXT NOT NULL DEFAULT 'last-save-wins',
+			collaboration_mode TEXT NOT NULL DEFAULT 'real-time',
 			created_at TEXT NOT NULL DEFAULT (datetime('now')),
 			updated_at TEXT NOT NULL DEFAULT (datetime('now'))
 		);
@@ -73,6 +73,15 @@ if (currentVersion < 4) {
 		ALTER TABLE pads ADD COLUMN yjs_state BLOB DEFAULT NULL;
 	`);
 	db.pragma('user_version = 4');
+}
+
+currentVersion = db.pragma('user_version', { simple: true }) as number;
+
+if (currentVersion < 5) {
+	db.exec(`
+		UPDATE pads SET collaboration_mode = 'real-time' WHERE collaboration_mode = 'last-save-wins';
+	`);
+	db.pragma('user_version = 5');
 }
 
 export default db;

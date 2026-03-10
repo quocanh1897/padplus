@@ -74,3 +74,32 @@
 	style:opacity={synced ? '1' : '0.7'}
 	style:transition="opacity 0.3s ease"
 ></textarea>
+
+<style>
+	.editor {
+		min-height: 60vh;
+		width: 100%;
+		padding: var(--space-lg);
+		border: none;
+		outline: none;
+		background: var(--color-bg);
+		color: var(--color-text);
+		font-family: var(--font-body);
+		font-size: var(--font-size-lg);
+		line-height: var(--line-height);
+		resize: none;
+		flex: 1;
+	}
+
+	.editor::placeholder {
+		color: var(--color-text-muted);
+		opacity: 0.5;
+	}
+
+	@media (max-width: 640px) {
+		.editor {
+			padding: var(--space-md);
+			font-size: var(--font-size-base);
+		}
+	}
+</style>
