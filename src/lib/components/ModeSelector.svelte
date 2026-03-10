@@ -1,8 +1,8 @@
 <script lang="ts">
 	type Props = {
 		slug: string;
-		mode: 'last-save-wins' | 'auto-merge';
-		onModeChange: (mode: 'last-save-wins' | 'auto-merge') => void;
+		mode: 'last-save-wins' | 'auto-merge' | 'real-time';
+		onModeChange: (mode: 'last-save-wins' | 'auto-merge' | 'real-time') => void;
 	};
 
 	let { slug, mode, onModeChange }: Props = $props();
@@ -10,7 +10,8 @@
 
 	const modes = [
 		{ value: 'last-save-wins', label: 'Last-save-wins' },
-		{ value: 'auto-merge', label: 'Auto-merge' }
+		{ value: 'auto-merge', label: 'Auto-merge' },
+		{ value: 'real-time', label: 'Real-time' }
 	] as const;
 
 	function handleClickOutside(event: MouseEvent) {

@@ -12,7 +12,8 @@
 
 	let content = $state(data.content);
 	let version = $state(data.version);
-	let collaborationMode = $state(data.collaboration_mode as 'last-save-wins' | 'auto-merge');
+	let collaborationMode = $state(data.collaboration_mode as 'last-save-wins' | 'auto-merge' | 'real-time');
+	let connectionStatus = $state<'connected' | 'connecting' | 'disconnected'>('disconnected');
 	let saveStatus = $state<'saved' | 'saving' | 'unsaved' | 'conflict' | 'error' | 'merged'>('saved');
 	let isSaving = $state(false);
 	let conflictData = $state<{ serverContent: string; serverVersion: number } | null>(null);
@@ -105,6 +106,9 @@
 	const debouncedSave = debounce(performSave, 400);
 
 	function handleInput(event: Event) {
+		// In real-time mode, Yjs handles sync -- no auto-save
+		if (collaborationMode === 'real-time') return;
+
 		const textarea = event.target as HTMLTextAreaElement;
 		content = textarea.value;
 
@@ -119,8 +123,20 @@
 		}
 	}
 
-	function handleModeChange(mode: 'last-save-wins' | 'auto-merge') {
+	function handleModeChange(mode: 'last-save-wins' | 'auto-merge' | 'real-time') {
+		const wasRealtime = collaborationMode === 'real-time';
 		collaborationMode = mode;
+
+		if (wasRealtime && mode !== 'real-time') {
+			// Exiting real-time mode: reload SSR data to get latest content from Yjs persistence
+			connectionStatus = 'disconnected';
+			invalidateAll().then(() => {
+				content = data.content;
+				version = data.version;
+				hasEdited = false;
+				saveStatus = 'saved';
+			});
+		}
 	}
 
 	// Reset state when navigating to a different pad
@@ -128,7 +144,7 @@
 		if (data.slug) {
 			content = data.content;
 			version = data.version;
-			collaborationMode = data.collaboration_mode as 'last-save-wins' | 'auto-merge';
+			collaborationMode = data.collaboration_mode as 'last-save-wins' | 'auto-merge' | 'real-time';
 			initialContent = data.content;
 			saveStatus = 'saved';
 			conflictData = null;
@@ -325,7 +341,7 @@
 </svelte:head>
 
 <div class="pad-layout">
-	<Header slug={data.slug} saveStatus={saveStatus} collaborationMode={collaborationMode} onModeChange={handleModeChange} />
+	<Header slug={data.slug} {saveStatus} {collaborationMode} onModeChange={handleModeChange} {connectionStatus} />
 
 	{#if conflictData}
 		<ConflictBanner
@@ -337,13 +353,23 @@
 	{/if}
 
 	<div class="content-area">
-		<textarea
-			class="editor"
-			value={content}
-			oninput={handleInput}
-			spellcheck="true"
-			placeholder="Start typing..."
-		></textarea>
+		{#if collaborationMode === 'real-time'}
+			{#await import('$lib/components/RealtimeEditor.svelte') then module}
+				<module.default
+					slug={data.slug}
+					initialContent={content}
+					onStatusChange={(status) => connectionStatus = status}
+				/>
+			{/await}
+		{:else}
+			<textarea
+				class="editor"
+				value={content}
+				oninput={handleInput}
+				spellcheck="true"
+				placeholder="Start typing..."
+			></textarea>
+		{/if}
 
 		<ImageGrid
 			{images}

@@ -1,15 +1,17 @@
 <script lang="ts">
 	import SaveStatus from './SaveStatus.svelte';
 	import ModeSelector from './ModeSelector.svelte';
+	import ConnectionDot from './ConnectionDot.svelte';
 
 	type Props = {
 		slug: string;
 		saveStatus: 'saved' | 'saving' | 'unsaved' | 'conflict' | 'error' | 'merged';
-		collaborationMode: 'last-save-wins' | 'auto-merge';
-		onModeChange: (mode: 'last-save-wins' | 'auto-merge') => void;
+		collaborationMode: 'last-save-wins' | 'auto-merge' | 'real-time';
+		onModeChange: (mode: 'last-save-wins' | 'auto-merge' | 'real-time') => void;
+		connectionStatus?: 'connected' | 'connecting' | 'disconnected';
 	};
 
-	let { slug, saveStatus, collaborationMode, onModeChange }: Props = $props();
+	let { slug, saveStatus, collaborationMode, onModeChange, connectionStatus }: Props = $props();
 </script>
 
 <header class="header">
@@ -24,7 +26,11 @@
 	</div>
 
 	<div class="header-right">
-		<SaveStatus status={saveStatus} />
+		{#if collaborationMode === 'real-time'}
+			<ConnectionDot status={connectionStatus ?? 'disconnected'} />
+		{:else}
+			<SaveStatus status={saveStatus} />
+		{/if}
 		<span class="header-mode">
 			<ModeSelector slug={slug} mode={collaborationMode} onModeChange={onModeChange} />
 		</span>
