@@ -1,0 +1,3 @@
+{$PADPLUS_DOMAIN:localhost} {
+    reverse_proxy padplus:3000
+}

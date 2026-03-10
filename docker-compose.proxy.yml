@@ -1,0 +1,26 @@
+# Usage: docker compose -f docker-compose.yml -f docker-compose.proxy.yml up -d
+services:
+  caddy:
+    image: caddy:2
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    restart: unless-stopped
+    depends_on:
+      - padplus
+
+  padplus:
+    ports: !override []
+    environment:
+      - ORIGIN=https://your-domain.com
+      - PROTOCOL_HEADER=x-forwarded-proto
+      - HOST_HEADER=x-forwarded-host
+
+volumes:
+  caddy-data:
+  caddy-config:
