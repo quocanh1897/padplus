@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+	import { tick } from 'svelte';
 	import SaveStatus from './SaveStatus.svelte';
 	import ModeSelector from './ModeSelector.svelte';
 	import ConnectionDot from './ConnectionDot.svelte';
@@ -12,6 +14,39 @@
 	};
 
 	let { slug, saveStatus, collaborationMode, onModeChange, connectionStatus }: Props = $props();
+
+	let isEditing = $state(false);
+	let editValue = $state('');
+	let inputEl = $state<HTMLInputElement | undefined>(undefined);
+
+	async function startEditing() {
+		editValue = slug;
+		isEditing = true;
+		await tick();
+		inputEl?.select();
+	}
+
+	function cancelEditing() {
+		isEditing = false;
+	}
+
+	function commitEditing() {
+		isEditing = false;
+		const trimmed = editValue.trim().replace(/^\/+|\/+$/g, '');
+		if (trimmed && trimmed !== slug) {
+			goto(`/${trimmed}`);
+		}
+	}
+
+	function handleKeydown(e: KeyboardEvent) {
+		if (e.key === 'Enter') {
+			e.preventDefault();
+			commitEditing();
+		} else if (e.key === 'Escape') {
+			e.preventDefault();
+			cancelEditing();
+		}
+	}
 </script>
 
 <header class="header">
@@ -22,7 +57,25 @@
 				<polyline points="9 22 9 12 15 12 15 22" />
 			</svg>
 		</a>
-		<span class="pad-name">/{slug}</span>
+		{#if isEditing}
+			<div class="slug-edit-wrapper">
+				<span class="slug-prefix">/</span>
+				<input
+					bind:this={inputEl}
+					bind:value={editValue}
+					class="slug-input"
+					type="text"
+					spellcheck="false"
+					autocomplete="off"
+					onblur={commitEditing}
+					onkeydown={handleKeydown}
+				/>
+			</div>
+		{:else}
+			<button class="pad-name-btn" type="button" onclick={startEditing} title="Click to navigate to a different pad">
+				/{slug}
+			</button>
+		{/if}
 	</div>
 
 	<div class="header-right">
@@ -68,13 +121,57 @@
 		color: var(--color-accent);
 	}
 
-	.pad-name {
+	/* Clickable pad name button */
+	.pad-name-btn {
 		font-size: var(--font-size-sm);
 		font-weight: 500;
 		color: var(--color-text);
+		background: none;
+		border: 1px solid transparent;
+		border-radius: var(--radius-sm);
+		padding: 2px 6px;
+		cursor: pointer;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
+		transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+	}
+
+	.pad-name-btn:hover {
+		background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+		border-color: color-mix(in srgb, var(--color-accent) 25%, transparent);
+		color: var(--color-accent);
+	}
+
+	/* Inline editing */
+	.slug-edit-wrapper {
+		display: flex;
+		align-items: center;
+		background: var(--color-bg);
+		border: 1.5px solid var(--color-accent);
+		border-radius: var(--radius-sm);
+		padding: 0 6px;
+		box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 15%, transparent);
+	}
+
+	.slug-prefix {
+		font-size: var(--font-size-sm);
+		font-weight: 500;
+		color: var(--color-text-muted);
+		user-select: none;
+		pointer-events: none;
+	}
+
+	.slug-input {
+		font-size: var(--font-size-sm);
+		font-weight: 500;
+		color: var(--color-text);
+		background: transparent;
+		border: none;
+		outline: none;
+		padding: 2px 0;
+		width: 200px;
+		max-width: 40vw;
 	}
 
 	.header-right {
@@ -93,9 +190,18 @@
 			display: none;
 		}
 
-		.pad-name {
+		.pad-name-btn {
 			font-size: var(--font-size-xs);
 			max-width: 160px;
+		}
+
+		.slug-input {
+			width: 140px;
+			font-size: var(--font-size-xs);
+		}
+
+		.slug-prefix {
+			font-size: var(--font-size-xs);
 		}
 	}
 </style>

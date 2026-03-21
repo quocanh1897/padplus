@@ -84,4 +84,25 @@ if (currentVersion < 5) {
 	db.pragma('user_version = 5');
 }
 
+currentVersion = db.pragma('user_version', { simple: true }) as number;
+
+if (currentVersion < 6) {
+	db.exec(`
+		CREATE TABLE IF NOT EXISTS files (
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			pad_id INTEGER NOT NULL REFERENCES pads(id) ON DELETE CASCADE,
+			uuid TEXT NOT NULL UNIQUE,
+			original_name TEXT NOT NULL,
+			stored_name TEXT NOT NULL,
+			mime_type TEXT NOT NULL DEFAULT 'application/octet-stream',
+			size_bytes INTEGER NOT NULL,
+			sort_order INTEGER NOT NULL DEFAULT 0,
+			created_at TEXT NOT NULL DEFAULT (datetime('now'))
+		);
+		CREATE INDEX IF NOT EXISTS idx_files_pad_id ON files(pad_id);
+		CREATE INDEX IF NOT EXISTS idx_files_uuid ON files(uuid);
+	`);
+	db.pragma('user_version = 6');
+}
+
 export default db;

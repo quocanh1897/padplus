@@ -6,7 +6,9 @@
 	import Header from '$lib/components/Header.svelte';
 	import ConflictBanner from '$lib/components/ConflictBanner.svelte';
 	import ImageGrid from '$lib/components/ImageGrid.svelte';
+	import FileGrid from '$lib/components/FileGrid.svelte';
 	import type { ImageItem } from '$lib/components/ImageGrid.svelte';
+	import type { FileItem } from '$lib/components/FileGrid.svelte';
 
 	let { data } = $props();
 
@@ -33,8 +35,24 @@
 		}))
 	);
 
+	// File state -- initialized from SSR data
+	let files = $state<FileItem[]>(
+		data.files.map((f: { uuid: string; original_name: string; size_bytes: number; mime_type: string; sort_order: number }) => ({
+			uuid: f.uuid,
+			originalName: f.original_name,
+			sizeBytes: f.size_bytes,
+			mimeType: f.mime_type,
+			downloadUrl: `/api/pads/${data.slug}/files/${f.uuid}`,
+			status: 'loaded' as const,
+			sort_order: f.sort_order
+		}))
+	);
+
 	// Store original File objects for retry functionality
 	const retryFiles = new Map<string, File>();
+	const retryFileUploads = new Map<string, File>();
+
+	const MAX_FILE_SIZE = 250 * 1024 * 1024; // 250MB
 
 	async function performSave() {
 		if (isSaving || saveStatus === 'conflict') return;
@@ -156,7 +174,17 @@
 				size_bytes: img.size_bytes,
 				sort_order: img.sort_order
 			}));
+			files = data.files.map((f: { uuid: string; original_name: string; size_bytes: number; mime_type: string; sort_order: number }) => ({
+				uuid: f.uuid,
+				originalName: f.original_name,
+				sizeBytes: f.size_bytes,
+				mimeType: f.mime_type,
+				downloadUrl: `/api/pads/${data.slug}/files/${f.uuid}`,
+				status: 'loaded' as const,
+				sort_order: f.sort_order
+			}));
 			retryFiles.clear();
+			retryFileUploads.clear();
 		}
 	});
 
@@ -310,6 +338,124 @@
 		retryFiles.delete(uuid);
 	}
 
+	// ---- File upload ----
+	function addFileErrorCard(message: string) {
+		const tempId = crypto.randomUUID();
+		files = [...files, {
+			uuid: tempId,
+			originalName: 'Error',
+			sizeBytes: 0,
+			mimeType: '',
+			downloadUrl: '',
+			status: 'error' as const,
+			errorMessage: message,
+			sort_order: files.length
+		}];
+	}
+
+	async function uploadFile(file: File) {
+		// Client-side size check
+		if (file.size > MAX_FILE_SIZE) {
+			addFileErrorCard(`"${file.name}" is too large (250MB max)`);
+			return;
+		}
+
+		const tempId = crypto.randomUUID();
+		const skeleton: FileItem = {
+			uuid: tempId,
+			originalName: file.name,
+			sizeBytes: file.size,
+			mimeType: file.type || 'application/octet-stream',
+			downloadUrl: '',
+			status: 'loading',
+			sort_order: files.length
+		};
+		files = [...files, skeleton];
+
+		// Store file for retry
+		retryFileUploads.set(tempId, file);
+
+		const formData = new FormData();
+		formData.append('file', file);
+
+		try {
+			const res = await fetch(`/api/pads/${data.slug}/files`, {
+				method: 'POST',
+				body: formData
+			});
+
+			if (!res.ok) {
+				const err = await res.json().catch(() => ({ message: 'Upload failed' }));
+				files = files.map(f =>
+					f.uuid === tempId
+						? { ...f, status: 'error' as const, errorMessage: err.message || 'Upload failed' }
+						: f
+				);
+				return;
+			}
+
+			const result = await res.json();
+			retryFileUploads.delete(tempId);
+			files = files.map(f =>
+				f.uuid === tempId
+					? {
+						...f,
+						uuid: result.id,
+						originalName: result.original_name,
+						sizeBytes: result.size,
+						mimeType: result.mime_type,
+						downloadUrl: `/api/pads/${data.slug}/files/${result.id}`,
+						status: 'loaded' as const,
+						sort_order: result.sort_order
+					}
+					: f
+			);
+		} catch {
+			files = files.map(f =>
+				f.uuid === tempId
+					? { ...f, status: 'error' as const, errorMessage: 'Upload failed -- check your connection' }
+					: f
+			);
+		}
+	}
+
+	function handleFileUpload(uploadedFiles: File[]) {
+		for (const file of uploadedFiles) {
+			uploadFile(file);
+		}
+	}
+
+	async function handleDeleteFile(uuid: string) {
+		const prev = files;
+		files = files.filter(f => f.uuid !== uuid);
+
+		try {
+			const res = await fetch(`/api/pads/${data.slug}/files/${uuid}`, {
+				method: 'DELETE'
+			});
+			if (!res.ok) {
+				files = prev;
+			}
+		} catch {
+			files = prev;
+		}
+	}
+
+	function handleFileRetry(uuid: string) {
+		const file = retryFileUploads.get(uuid);
+		files = files.filter(f => f.uuid !== uuid);
+		retryFileUploads.delete(uuid);
+
+		if (file) {
+			uploadFile(file);
+		}
+	}
+
+	function handleFileDismiss(uuid: string) {
+		files = files.filter(f => f.uuid !== uuid);
+		retryFileUploads.delete(uuid);
+	}
+
 	function handleOverwrite() {
 		if (!conflictData) return;
 		version = conflictData.serverVersion;
@@ -377,6 +523,14 @@
 			onReorder={handleReorder}
 			onRetry={handleRetry}
 			onDismiss={handleDismiss}
+		/>
+
+		<FileGrid
+			{files}
+			onUpload={handleFileUpload}
+			onDelete={handleDeleteFile}
+			onRetry={handleFileRetry}
+			onDismiss={handleFileDismiss}
 		/>
 	</div>
 </div>
