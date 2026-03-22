@@ -3,10 +3,10 @@
 ## Quick Start (Docker Run)
 
 ```bash
-docker run -d -v padplus-data:/data -p 3000:3000 padplus
+docker run -d -v padplus-data:/data -p 8462:8462 padplus
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open [http://localhost:8462](http://localhost:8462) in your browser.
 
 ## Docker Compose
 
@@ -30,8 +30,8 @@ Caddy automatically provisions TLS certificates from Let's Encrypt.
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `PORT` | `3000` | Server port |
-| `ORIGIN` | `http://localhost:3000` | App URL for CSRF protection. Must match your domain. |
+| `PORT` | `8462` | Server port |
+| `ORIGIN` | `http://localhost:8462` | App URL for CSRF protection. Must match your domain. |
 | `BODY_SIZE_LIMIT` | `10M` | Max request body size (includes image uploads) |
 | `DB_PATH` | `./data/padplus.db` | SQLite database file path |
 | `UPLOAD_DIR` | `./data/uploads` | Directory for uploaded images |

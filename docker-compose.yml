@@ -2,11 +2,11 @@ services:
   padplus:
     build: .
     ports:
-      - "3000:3000"
+      - "8462:8462"
     volumes:
       - padplus-data:/data
     environment:
-      - ORIGIN=http://localhost:3000
+      - ORIGIN=http://localhost:8462
     restart: unless-stopped
 
 volumes:

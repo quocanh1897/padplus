@@ -28,7 +28,7 @@ COPY --from=build /app/package.json ./
 COPY --from=build /app/server ./server
 
 # Create /data directory and symlink so ./data/ resolves to /data volume
-# This enables: docker run -v padplus-data:/data -p 3000:3000 padplus
+# This enables: docker run -v padplus-data:/data -p 8462:8462 padplus
 RUN mkdir -p /data/uploads && ln -s /data /app/data
 
 # Create non-root padplus user
@@ -37,8 +37,8 @@ RUN groupadd -r padplus && useradd -r -g padplus -d /app padplus \
 
 # Environment defaults
 ENV NODE_ENV=production
-ENV PORT=3000
-ENV ORIGIN=http://localhost:3000
+ENV PORT=8462
+ENV ORIGIN=http://localhost:8462
 ENV BODY_SIZE_LIMIT=10M
 ENV DB_PATH=./data/padplus.db
 ENV UPLOAD_DIR=./data/uploads
@@ -46,10 +46,10 @@ ENV UPLOAD_DIR=./data/uploads
 # Switch to non-root user
 USER padplus
 
-EXPOSE 3000
+EXPOSE 8462
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:3000/health || exit 1
+    CMD curl -f http://localhost:8462/health || exit 1
 
 CMD ["node", "server/index.js"]

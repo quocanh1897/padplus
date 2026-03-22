@@ -17,7 +17,7 @@ echo "[test-docker] Building Docker image: $IMAGE"
 docker build -t "$IMAGE" .
 
 echo "[test-docker] Starting container: $CONTAINER on port $PORT"
-docker run -d --name "$CONTAINER" -p "$PORT:3000" "$IMAGE"
+docker run -d --name "$CONTAINER" -p "$PORT:8462" "$IMAGE"
 
 echo "[test-docker] Waiting for health check (up to 30s)..."
 elapsed=0
