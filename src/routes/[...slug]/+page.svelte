@@ -57,15 +57,21 @@
 	async function performSave() {
 		if (isSaving || saveStatus === 'conflict') return;
 
+		// Capture slug at save time to prevent cross-pad saves after navigation
+		const saveSlug = data.slug;
+
 		isSaving = true;
 		saveStatus = 'saving';
 
 		try {
-			const res = await fetch(`/api/pads/${data.slug}`, {
+			const res = await fetch(`/api/pads/${saveSlug}`, {
 				method: 'PUT',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ content, version })
 			});
+
+			// Discard response if we navigated away during the save
+			if (saveSlug !== data.slug) return;
 
 			if (res.ok) {
 				const result = await res.json();
@@ -115,6 +121,7 @@
 				saveStatus = 'error';
 			}
 		} catch {
+			if (saveSlug !== data.slug) return;
 			saveStatus = 'error';
 		} finally {
 			isSaving = false;
@@ -160,11 +167,13 @@
 	// Reset state when navigating to a different pad
 	$effect(() => {
 		if (data.slug) {
+			debouncedSave.cancel(); // Cancel any pending save from previous page
 			content = data.content;
 			version = data.version;
 			collaborationMode = data.collaboration_mode as 'last-save-wins' | 'auto-merge' | 'real-time';
 			initialContent = data.content;
 			saveStatus = 'saved';
+			isSaving = false;
 			conflictData = null;
 			hasEdited = false;
 			images = data.images.map((img: { uuid: string; size_bytes: number; sort_order: number }) => ({

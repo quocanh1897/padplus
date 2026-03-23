@@ -31,6 +31,7 @@
 	}
 
 	function commitEditing() {
+		if (!isEditing) return; // Guard against double invocation (Enter + blur)
 		isEditing = false;
 		const trimmed = editValue.trim().replace(/^\/+|\/+$/g, '');
 		if (trimmed && trimmed !== slug) {
