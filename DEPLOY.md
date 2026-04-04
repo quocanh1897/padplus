@@ -32,11 +32,13 @@ Caddy automatically provisions TLS certificates from Let's Encrypt.
 |----------|---------|-------------|
 | `PORT` | `8462` | Server port |
 | `ORIGIN` | `http://localhost:8462` | App URL for CSRF protection. Must match your domain. |
-| `BODY_SIZE_LIMIT` | `10M` | Max request body size (includes image uploads) |
+| `BODY_SIZE_LIMIT` | `Infinity` | Max request body size (SvelteKit adapter-node limit) |
 | `DB_PATH` | `./data/padplus.db` | SQLite database file path |
 | `UPLOAD_DIR` | `./data/uploads` | Directory for uploaded images |
 | `MAX_IMAGE_SIZE` | `5242880` | Max single image size in bytes (5MB) |
 | `MAX_PAD_QUOTA` | `104857600` | Max total image storage per pad in bytes (100MB) |
+| `MAX_FILE_SIZE` | `2147483648` | Max single file upload size in bytes (2GB) |
+| `MAX_PAD_FILE_QUOTA` | `1073741824` | Max total file storage per pad in bytes (1GB) |
 | `LOG_LEVEL` | `info` | Log verbosity |
 
 ## Data

@@ -39,7 +39,7 @@ RUN groupadd -r padplus && useradd -r -g padplus -d /app padplus \
 ENV NODE_ENV=production
 ENV PORT=8462
 ENV ORIGIN=http://localhost:8462
-ENV BODY_SIZE_LIMIT=10M
+ENV BODY_SIZE_LIMIT=Infinity
 ENV DB_PATH=./data/padplus.db
 ENV UPLOAD_DIR=./data/uploads
 

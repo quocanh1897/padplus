@@ -63,7 +63,8 @@ Dev server at `http://localhost:5173` with hot reload and WebSocket support.
 | `ORIGIN` | `http://localhost:3000` | App URL (for CSRF protection) |
 | `DB_PATH` | `./data/padplus.db` | SQLite database file path |
 | `UPLOAD_DIR` | `./data/uploads` | Image storage directory |
-| `BODY_SIZE_LIMIT` | `10M` | Max request body size |
+| `BODY_SIZE_LIMIT` | `Infinity` | Max request body size |
+| `MAX_FILE_SIZE` | `2147483648` | Max single file upload size in bytes (2GB) |
 
 See [DEPLOY.md](DEPLOY.md) for full deployment docs including HTTPS setup with Caddy, backup instructions, and all environment variables.
 

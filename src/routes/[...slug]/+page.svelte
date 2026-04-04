@@ -52,7 +52,7 @@
 	const retryFiles = new Map<string, File>();
 	const retryFileUploads = new Map<string, File>();
 
-	const MAX_FILE_SIZE = 250 * 1024 * 1024; // 250MB
+	const MAX_FILE_SIZE = data.maxFileSize;
 
 	async function performSave() {
 		if (isSaving || saveStatus === 'conflict') return;
@@ -365,7 +365,9 @@
 	async function uploadFile(file: File) {
 		// Client-side size check
 		if (file.size > MAX_FILE_SIZE) {
-			addFileErrorCard(`"${file.name}" is too large (250MB max)`);
+			const maxMB = Math.round(MAX_FILE_SIZE / (1024 * 1024));
+			const label = maxMB >= 1024 ? `${Math.round(maxMB / 1024)}GB` : `${maxMB}MB`;
+			addFileErrorCard(`"${file.name}" is too large (${label} max)`);
 			return;
 		}
 
@@ -509,13 +511,15 @@
 
 	<div class="content-area">
 		{#if collaborationMode === 'real-time'}
-			{#await import('$lib/components/RealtimeEditor.svelte') then module}
-				<module.default
-					slug={data.slug}
-					initialContent={content}
-					onStatusChange={(status) => connectionStatus = status}
-				/>
-			{/await}
+			{#key data.slug}
+				{#await import('$lib/components/RealtimeEditor.svelte') then module}
+					<module.default
+						slug={data.slug}
+						initialContent={content}
+						onStatusChange={(status) => connectionStatus = status}
+					/>
+				{/await}
+			{/key}
 		{:else}
 			<textarea
 				class="editor"
@@ -536,6 +540,7 @@
 
 		<FileGrid
 			{files}
+			maxFileSize={MAX_FILE_SIZE}
 			onUpload={handleFileUpload}
 			onDelete={handleDeleteFile}
 			onRetry={handleFileRetry}

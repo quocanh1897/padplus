@@ -10,10 +10,8 @@ import {
 	getPadFileTotalSize,
 	getFileNextSortOrder
 } from '$lib/server/files';
+import { MAX_FILE_SIZE, MAX_PAD_FILE_QUOTA, formatBytes } from '$lib/server/config';
 import type { RequestHandler } from './$types';
-
-const MAX_FILE_SIZE = 250 * 1024 * 1024; // 250MB
-const MAX_PAD_FILE_QUOTA = 1024 * 1024 * 1024; // 1GB total files per pad
 
 export const POST: RequestHandler = async ({ params, request }) => {
 	const slug = params.slug;
@@ -24,7 +22,7 @@ export const POST: RequestHandler = async ({ params, request }) => {
 	// Check Content-Length header early
 	const contentLength = parseInt(request.headers.get('content-length') || '0');
 	if (contentLength > MAX_FILE_SIZE) {
-		error(413, 'File too large (250MB max)');
+		error(413, `File too large (${formatBytes(MAX_FILE_SIZE)} max)`);
 	}
 
 	// Resolve pad (create if doesn't exist)
@@ -43,13 +41,13 @@ export const POST: RequestHandler = async ({ params, request }) => {
 
 	// Double-check actual file size
 	if (file.size > MAX_FILE_SIZE) {
-		error(413, 'File too large (250MB max)');
+		error(413, `File too large (${formatBytes(MAX_FILE_SIZE)} max)`);
 	}
 
 	// Check per-pad file quota
 	const currentTotal = getPadFileTotalSize(pad.id);
 	if (currentTotal + file.size > MAX_PAD_FILE_QUOTA) {
-		error(413, 'Pad file quota exceeded (1GB max)');
+		error(413, `Pad file quota exceeded (${formatBytes(MAX_PAD_FILE_QUOTA)} max)`);
 	}
 
 	// Read file into buffer

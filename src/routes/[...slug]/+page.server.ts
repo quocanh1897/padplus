@@ -2,6 +2,7 @@ import { error } from '@sveltejs/kit';
 import { getPadBySlug, createPad } from '$lib/server/pads';
 import { getImagesByPadId } from '$lib/server/images';
 import { getFilesByPadId } from '$lib/server/files';
+import { MAX_FILE_SIZE } from '$lib/server/config';
 import type { PageServerLoad } from './$types';
 
 // File extensions to reject
@@ -40,6 +41,7 @@ export const load: PageServerLoad = ({ params }) => {
 		version: pad.version,
 		collaboration_mode: pad.collaboration_mode,
 		images,
-		files
+		files,
+		maxFileSize: MAX_FILE_SIZE
 	};
 };

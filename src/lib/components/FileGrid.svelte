@@ -15,13 +15,19 @@
 
 	interface Props {
 		files: FileItem[];
+		maxFileSize: number;
 		onUpload: (files: File[]) => void;
 		onDelete: (uuid: string) => void;
 		onRetry: (uuid: string) => void;
 		onDismiss: (uuid: string) => void;
 	}
 
-	let { files, onUpload, onDelete, onRetry, onDismiss }: Props = $props();
+	let { files, maxFileSize, onUpload, onDelete, onRetry, onDismiss }: Props = $props();
+
+	const maxSizeLabel = (() => {
+		const mb = Math.round(maxFileSize / (1024 * 1024));
+		return mb >= 1024 ? `${Math.round(mb / 1024)} GB` : `${mb} MB`;
+	})();
 
 	let isDragging = $state(false);
 	let dragCounter = $state(0);
@@ -135,7 +141,7 @@
 					<line x1="12" y1="3" x2="12" y2="15" />
 				</svg>
 				<span>Drop files here or <strong>browse</strong></span>
-				<span class="size-hint">Max 250 MB per file</span>
+				<span class="size-hint">Max {maxSizeLabel} per file</span>
 			</button>
 		{/if}
 	</div>
